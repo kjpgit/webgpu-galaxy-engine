@@ -1,5 +1,13 @@
 // Galaxy Engine - Copyright (C) 2023 Karl Pickett - All Rights Reserved
 
+// This module builds a contiguous index of pointers to fine shapes.  This
+// is so the rasterizer can get a tile's work with only a single memory fetch.
+
+// The three passes are:
+// 1. write out the shape counts / histogram
+// 2. allocate contiguous memory for each index bucket
+// 3. write out all shape pointers
+
 import * as constants from "../constants.js";
 export var BinCode = `
 
@@ -56,11 +64,14 @@ fn bin2_main(
     // Allocate contiguous memory chunk
     let pointers_start = atomicAdd(&g_misc.num_fine_pointers, num_pointers);
 
+    // TODO: Check for overflow/OOM here
+    // We will have to adjust the length down, potentially to 0
+
     // Write the index (we will populate data later, in step 3)
     g_misc.tile_shape_index[y][x].offset = pointers_start;
 
-    // This is a duplicate of ths histogram, but whatever.
-    // We don't need to re-mark the atomic memory as read-only
+    // This is a duplicate of the histogram, but whatever.
+    // It could have a lower value if we are OOM.
     g_misc.tile_shape_index[y][x].length = num_pointers;
 
     // Clear this counter so step 3 can use it
@@ -74,7 +85,6 @@ fn bin3_main(
     @builtin(local_invocation_id) local_invocation_id : vec3<u32>,
 )
 {
-    // Now we write out the sorted pointers.
     // Each WG processes WG_BIN_WORKLOAD fine shapes
     // (Same as step 1)
 
