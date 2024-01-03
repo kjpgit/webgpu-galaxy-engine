@@ -1,0 +1,7 @@
+node_modules/
+build/
+old/
+
+*.swp
+todo.txt
+.git
