@@ -55,10 +55,12 @@ export function float_to_u8(f: number): number {
 // If @value <= @min, return 0
 // If @value >= @max, return 1
 // If @value is between @min and @max, return a smooth interpolation between 0 and 1.
+/*
 export function smoothstep(min:number, max:number, value:number) {
     var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
     return x * x * (3 - 2*x);
 }
+*/
 
 
 

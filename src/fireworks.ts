@@ -3,7 +3,7 @@
 import * as constants from "./constants.js";
 import { type Scene, Engine } from "./engine.js";
 import { Vector2, Vector3, Color4  } from "./util.js";
-import { RandomUniformUnitVector3D, smoothstep, random_range } from "./math.js";
+import { RandomUniformUnitVector3D, random_range } from "./math.js";
 
 const NUM_FLARES = 9000
 const MAX_FIREWORKS = 2
