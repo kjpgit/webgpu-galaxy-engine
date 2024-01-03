@@ -1,5 +1,7 @@
 // Galaxy Engine - Copyright (C) 2023 Karl Pickett - All Rights Reserved
 
+// This displays our finished color buffer to the screen, using a full-screen quad.
+
 import * as constants from "../constants.js";
 export var FragmentCode = `
 
