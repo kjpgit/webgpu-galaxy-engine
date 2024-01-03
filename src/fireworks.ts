@@ -9,11 +9,11 @@ const NUM_FLARES = 9000
 const MAX_FIREWORKS = 2
 const HOLD_FIREWORK = 0
 
-const LAUNCH_TIME_RANGE = [21.0, 21.0]
+const LAUNCH_TIME_RANGE = [20.8, 20.8]
 const LAUNCH_RANGE_X = [0.5, 0.5]
 const LAUNCH_RANGE_Y = [0.5, 0.5]
 
-const FLARE_DURATION_RANGE = [21.0, 21.0]
+const FLARE_DURATION_RANGE = [20.8, 20.8]
 const FLARE_SIZE_RANGE = [0.001, 0.005]  // this is really a radius
 const FLARE_COLOR_VARIANCE_RANGE = [-0.3, 0.3]
 const FLARE_VELOCITY_VARIANCE_RANGE = [1.0, 10.5]
