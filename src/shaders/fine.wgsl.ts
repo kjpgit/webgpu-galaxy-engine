@@ -1,56 +1,30 @@
 // Galaxy Engine - Copyright (C) 2023 Karl Pickett - All Rights Reserved
 
+// This rasterizes particles (using an SDF) to the color buffer.
+
 import * as constants from "../constants.js";
 export var FineCode = `
 
 ${constants.WGSL_INCLUDE}
-
 
 @group(0) @binding(0) var<uniform>              g_uniform: UniformData;
 @group(0) @binding(1) var<storage, read>        g_misc: MiscDataRead;
 @group(0) @binding(2) var<storage, read>        g_fine_shapes: array<FineShape>;
 @group(0) @binding(3) var<storage, read_write>  g_color_buffer: array<vec3<f32>>;
 
-
-// Testing with 40k x2 locked frame (GPU avg ms)
-// Frame 1/60   Num blends = 137k
-// -------------------------------------------------
-// noop         = 14 - 16  (although cpu and gpu load is high)
-// heatmap      = 160
-// heatmap2     = 260   // wow, most of the work is just basic math
-// monochrome   = 300
-// monochrome with full shape scan = 1400-1700
-// normal       = 300
-// normal nobbox = 300 (no difference with 1/60 frame)
-// normal_integrated_bbox = 300
-// smoothstep normal = 330
-
-// Frame 50/60  Num blends = 112k
-// -------------------------------------------------
-// normal       = 265-280ms
-// normal nobbox = 270-280
-
-
 const PERFORMANCE_TEST_NOOOP      = false;
 const PERFORMANCE_TEST_HEATMAP    = false;
 const PERFORMANCE_TEST_MONOCHROME = false;
 
-
-//
-// Rasterize fine shapes, writing to texture memory.
-//
-//
-const WG_RASTER_WORKLOAD = 256;
-
 //var<workgroup> shape: FineShape;
 
-@compute @workgroup_size(16, 16)
+@compute @workgroup_size(TILE_SIZE_X, TILE_SIZE_Y)
 fn fine_main(
     @builtin(workgroup_id) workgroup_id : vec3<u32>,
     @builtin(local_invocation_id) local_invocation_id : vec3<u32>,
 )
 {
-    // Each WG processes 1 tile, which contains 256 pixels (1 pixel per thread)
+    // Each WG processes 1 tile, which contains 16x16=256 pixels (1 pixel per thread)
     // Dispatch will be 4480 WGs
 
     let my_tile_id = i32(workgroup_id.x);
