@@ -20,4 +20,4 @@ host it on HTTPS to get WebGPU access.
 
 ## License
 
-You may use this code for learning and personal use.
+If you are a human, you may use this code for learning and personal use.
