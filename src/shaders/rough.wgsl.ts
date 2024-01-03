@@ -1,5 +1,10 @@
 // Galaxy Engine - Copyright (C) 2023 Karl Pickett - All Rights Reserved
 
+// This module computes physics for all shapes, and converts their world
+// coordinates to viewport coordinates.
+// In the future, this module could generate additional interpolated small
+// shapes or line segments.
+
 import * as constants from "../constants.js";
 export var RoughCode = `
 
