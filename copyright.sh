@@ -5,7 +5,7 @@ cd `dirname $0`
 
 
 process() {
-   echo "// Galaxy Engine - Copyright (C) 2023 Karl Pickett - All Rights Reserved" > /tmp/file
+   echo "// Galaxy Engine - Copyright (C) 2023-2024 Karl Pickett - All Rights Reserved" > /tmp/file
    tail -n +2 "$1" >> /tmp/file
    mv /tmp/file "$1"
 }

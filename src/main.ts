@@ -132,13 +132,12 @@ const init_webgpu = async (main: Main) => {
     const canvas = <HTMLCanvasElement> document.getElementById("canvas-container") ?? do_throw("no canvas");
     const context = canvas.getContext("webgpu") ?? do_throw("Canvas does not support WebGPU");
 
-    // Set internal rendering resolution, and also compensate for default page zoom
     let dpr = window.devicePixelRatio || 1
-    canvas.style.width = `${constants.SCREEN_WIDTH_PX / dpr}px`
-    canvas.style.height = `${constants.SCREEN_HEIGHT_PX / dpr}px`
-    canvas.width = constants.SCREEN_WIDTH_PX;
-    canvas.height = constants.SCREEN_HEIGHT_PX;
-    console.log(`internal rendering resolution is ${canvas.width} x ${canvas.height}`);
+    console.log(`devicePixelRatio is ${dpr}`);
+    console.log(`internal rendering resolution: ${canvas.width} x ${canvas.height}`);
+    console.log(`canvas css px:  ${canvas.scrollWidth} x ${canvas.scrollHeight}`);
+    console.log(`canvas real px: ${canvas.scrollWidth*dpr} x ${canvas.scrollHeight*dpr}`);
+
     const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
 
     context.configure({
@@ -211,7 +210,7 @@ const init_webgpu = async (main: Main) => {
         size: Math.max(constants.MISC_BUFFER_SIZE),
         usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
     });
-    console.log(constants.MISC_BUFFER_SIZE)
+    console.log(`MISC_BUFFER_SIZE: ${constants.MISC_BUFFER_SIZE}`)
 
     const misc_buffer_cpu = device.createBuffer({
         label: "misc_buffer_cpu",
