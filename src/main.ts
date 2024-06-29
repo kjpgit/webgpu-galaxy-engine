@@ -7,6 +7,7 @@ import { RoughCode } from "./shaders/rough.wgsl.js"
 import { FineCode } from "./shaders/fine.wgsl.js"
 import { BinCode } from "./shaders/bin.wgsl.js"
 import { FragmentCode } from "./shaders/quad.wgsl.js"
+import { ge_setup } from "./controls.js"
 
 
 class Main
@@ -429,6 +430,7 @@ const init_webgpu = async (main: Main) => {
 
 
 try {
+    ge_setup();
     let main = new Main()
     await init_webgpu(main)
 } catch (err: any) {
