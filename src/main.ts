@@ -7,7 +7,8 @@ import { RoughCode } from "./shaders/rough.wgsl.js"
 import { FineCode } from "./shaders/fine.wgsl.js"
 import { BinCode } from "./shaders/bin.wgsl.js"
 import { FragmentCode } from "./shaders/quad.wgsl.js"
-import { ge_setup } from "./controls.js"
+import { SettingsWindow } from "./settings_window.js"
+import { GamePad } from "./gamepad.js"
 
 
 class Main
@@ -404,6 +405,21 @@ const init_webgpu = async (main: Main) => {
 
         device.queue.onSubmittedWorkDone().then(() => {
             main.log_perf("onSubmittedWorkDone")
+            let gamepads = navigator.getGamepads();
+            if (gamepads.length > 0) {
+                const div = document.getElementById("controls-text")!
+                div.innerHTML = "";
+                for (let i = 0; i < gamepads.length; i++) {
+                    div.innerHTML += `<h2> Controller ${i} </h2>`
+                    if (gamepads[i] !== null) {
+                        div.innerHTML += `<p class=mono> Axes    ${GamePad.PrintAxes(gamepads[i!])} </p>`;
+                        div.innerHTML += `<p class=mono> Buttons ${GamePad.PrintButtons(gamepads[i!])} </p>`;
+                    } else {
+                        div.innerHTML += `<p>Not detected, press a button if it is connected</p>`;
+                    }
+                }
+            }
+
             const perf_gpu_end = performance.now()
             const frame_timing = [
                 perf_cpu_end - perf_cpu_start,
@@ -430,7 +446,7 @@ const init_webgpu = async (main: Main) => {
 
 
 try {
-    ge_setup();
+    SettingsWindow.Setup();
     let main = new Main()
     await init_webgpu(main)
 } catch (err: any) {
